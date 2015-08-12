@@ -1,0 +1,20 @@
+{
+  "name": "geek",
+  "main": "geek.js",
+  "version": "0.0.0",
+  "authors": [
+    "Malcolm Young <malcolm.young@capgemini.com>"
+  ],
+  "description": "Music Geek Monthly",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-spotify": "~1.0.0"
+  }
+}

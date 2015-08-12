@@ -1,0 +1,80 @@
+<!doctype html>
+<html data-ng-app="geek">
+<head>
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="geek.css">
+</head>
+<body>
+<div data-ng-controller="geekController as geek" class="container">
+
+  <select data-ng-options="list.id as list.name for list in playlists track by list.id" data-ng-model="selectedPlaylist"></select>
+
+  <table class="table" data-ng-if="authenticated">
+    <thead>
+      <tr>
+        <th>Track</th>
+        <th>Album</th>
+        <th>Artist</th>
+        <th coldiv="3"></th>
+      </tr>
+    </thead>
+    <tr data-ng-repeat="track in tracks">
+      <td>
+        <a data-ng-href="{{ track.track.external_urls.spotify">
+          {{ track.track.name }}
+        </a>
+      </td>
+
+      <td>
+        <a data-ng-href="{{ track.track.album.external_urls.spotify }}">
+          <img data-ng-if="authenticated" data-ng-src="{{ track.track.album.images[2].url }}" />
+          {{ track.track.album.name }}
+        </a>
+      </td>
+
+      <td>
+        <a data-ng-href="{{ track.track.artists[0].external_urls.spotify }}">{{
+          track.track.artists[0].name }}</a>
+      </td>
+
+      <td class="score">
+        <button class="btn btn-success" data-ng-click="hit($index)" data-attr="track-id"><i
+          class="fa fa-thumbs-o-up"></i>Hit
+        </button>
+        <div class="score" data-ng-bind="track.hits"></div>
+      </td>
+      <td class="score">
+        <button class="btn btn-danger" data-ng-click="miss($index)" data-attr="track-id"><i
+          class="fa fa-thumbs-o-down"></i>Miss
+        </button>
+        <div class="score" data-ng-bind="track.misses"></div>
+      </td>
+      <td class="score">
+        <button class="btn btn-info" data-ng-click="maybe($index)" data-attr="track-id"><i
+          class="fa fa-question"></i>Maybe
+        </button>
+        <div data-ng-bind="track.maybes"></div>
+      </td>
+
+    </tr>
+  </table>
+
+  <button class="btn btn-primary" data-ng-if="!authenticated" data-ng-click="login()">Login with Spotify</button>
+
+  <iframe data-ng-if="authenticated" data-ng-src="{{embedUrl}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+
+</div>
+
+<script
+  src="bower_components/angular/angular.min.js"></script>
+<script
+  src="bower_components/angular-spotify/dist/angular-spotify.min.js"></script>
+<script src="geek.js"></script>
+</body>
+</html>
+
+
+
