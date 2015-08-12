@@ -41,14 +41,14 @@ angular.module('geek', ['spotify'])
         $scope.tracks = data.tracks.items;
 
         for (var index in $scope.tracks) {
-          $scope.tracks[index].hits = $scope.tracks[index].misses = $scope.tracks[index].maybes = 0;
+          $scope.tracks[index].hit = $scope.tracks[index].miss = $scope.tracks[index].maybe = 0;
 
           var track = $scope.tracks[index].track;
 
           if (track.id in $scope.scoresLookup) {
-            $scope.tracks[index].hits = $scope.scoresLookup[track.id].hits;
-            $scope.tracks[index].misses = $scope.scoresLookup[track.id].misses;
-            $scope.tracks[index].maybes = $scope.scoresLookup[track.id].maybes;
+            $scope.tracks[index].hit = $scope.scoresLookup[track.id].hit;
+            $scope.tracks[index].miss = $scope.scoresLookup[track.id].miss;
+            $scope.tracks[index].maybe = $scope.scoresLookup[track.id].maybe;
           }
         }
 
@@ -72,7 +72,7 @@ angular.module('geek', ['spotify'])
     };
 
     $scope.hit = function(index) {
-      $scope.tracks[index].hits++;
+      $scope.tracks[index].hit++;
 
       var id = $scope.getTrackId(index)
 
@@ -81,14 +81,14 @@ angular.module('geek', ['spotify'])
     };
 
     $scope.miss = function(index) {
-      $scope.tracks[index].misses++;
+      $scope.tracks[index].miss++;
 
       var id = $scope.getTrackId(index)
       $scope.updateScores(id, 'miss');
     };
 
     $scope.maybe = function(index) {
-      $scope.tracks[index].maybes++;
+      $scope.tracks[index].maybe++;
 
       var id = $scope.getTrackId(index)
       $scope.updateScores(id, 'maybe');
