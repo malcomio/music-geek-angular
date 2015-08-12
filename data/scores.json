@@ -1,10 +1,14 @@
-{
-  "scores" : [
-    {
-      "id": "1sNovU2kt1WBrLhuAFhReK",
-      "hits": 0,
-      "misses": 2,
-      "maybes": 3
-    }
-  ]
-}
+{"scores": [
+  {
+    "id": "1sNovU2kt1WBrLhuAFhReK",
+    "hit": 0,
+    "miss": 2,
+    "maybe": 3
+  },
+  {
+    "id": "1RN36cRP9uYoYc0bzbZCW2",
+    "hit": 2,
+    "miss": 6,
+    "maybe": 3
+  }
+]}
