@@ -21,32 +21,32 @@ angular.module('geek', ['spotify'])
       $scope.playlistsLookup[$scope.playlists[i].id] = $scope.playlists[i];
     }
 
+    $scope.updatePlaylist = function () {
+      $scope.loadedPlaylist = $scope.playlistsLookup[$scope.selectedPlaylist];
+
+      Spotify.getPlaylist($scope.loadedPlaylist.user, $scope.loadedPlaylist.id).then(function (data) {
+        console.log(data);
+
+        $scope.playlist = data;
+        $scope.tracks = data.tracks.items;
+
+        for (var index in $scope.tracks) {
+          $scope.tracks[index].hits = $scope.tracks[index].misses = $scope.tracks[index].maybes = 0;
+        }
+
+        var embedUrl = "https://embed.spotify.com/?uri=spotify%3Auser%3A" + data.owner.id + "%3Aplaylist%3A" + data.id;
+
+        $scope.embedUrl = $sce.trustAsResourceUrl(embedUrl);
+
+      });
+    };
 
     $scope.login = function () {
       Spotify.login().then(function (data) {
 
         $scope.authenticated = true;
 
-        $scope.loadedPlaylist = $scope.playlistsLookup[$scope.selectedPlaylist];
-
-        Spotify.getPlaylist($scope.loadedPlaylist.user, $scope.loadedPlaylist.id).then(function (data) {
-          console.log(data);
-
-          $scope.playlist = data;
-          $scope.tracks = data.tracks.items;
-
-          for (var index in $scope.tracks) {
-            $scope.tracks[index].hits = $scope.tracks[index].misses = $scope.tracks[index].maybes = 0;
-          }
-
-          var embedUrl = "https://embed.spotify.com/?uri=spotify%3Auser%3A" + data.owner.id + "%3Aplaylist%3A" + data.id;
-
-          console.log(embedUrl);
-
-          $scope.embedUrl = $sce.trustAsResourceUrl(embedUrl);
-
-          console.log($scope.embedUrl);
-        });
+        $scope.updatePlaylist();
 
       }, function () {
         console.log('didn\'t log in');
