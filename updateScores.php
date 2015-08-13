@@ -6,14 +6,6 @@ $json = json_decode($contents, TRUE);
 
 if (!empty($_GET['id'])) {
   $id = htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8');
-  if (!array_key_exists($id, $scores_lookup)) {
-    $json['scores'][] = array(
-      'id' => $id,
-      'hit' => array(),
-      'miss' => array(),
-      'maybe' => array(),
-    );
-  }
 
   $user_id = htmlspecialchars($_GET['user'], ENT_QUOTES, 'UTF-8');
 
