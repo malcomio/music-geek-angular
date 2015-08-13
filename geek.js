@@ -9,10 +9,12 @@ angular.module('geek', ['spotify'])
     '$scope', '$http', '$sce', 'Spotify',
     function ($scope, $http, $sce, Spotify) {
 
+      // Initialise scope variables.
       $scope.authenticated = false;
-
       $scope.playlists = []
       $scope.playlistsLookup = {};
+      $scope.scores = []
+      $scope.scoresLookup = {};
 
       $http.get('data/playlists.json')
         .then(function (res) {
@@ -24,12 +26,11 @@ angular.module('geek', ['spotify'])
           // Set the first playlist as selected by default.
           $scope.selectedPlaylist = $scope.playlists[0];
 
+          // Try to
           $scope.updatePlaylist();
         });
 
 
-      $scope.scores = []
-      $scope.scoresLookup = {};
       $http.get('data/scores.json')
         .then(function (res) {
           $scope.scores = res.data.scores;
@@ -38,16 +39,20 @@ angular.module('geek', ['spotify'])
           }
         });
 
+      /**
+       * React to a change of playlist.
+       *
+       * @param playlist
+       */
       $scope.updatePlaylist = function (playlist) {
 
         if (typeof playlist === 'undefined') {
           playlist = $scope.selectedPlaylist;
         }
 
+        // Update the embedded playlist.
         var embedUrl = "https://embed.spotify.com/?uri=spotify%3Auser%3A" + playlist.owner.id + "%3Aplaylist%3A" + playlist.id;
-
         $scope.embedUrl = $sce.trustAsResourceUrl(embedUrl);
-
 
         $scope.loadedPlaylist = $scope.playlistsLookup[playlist];
 
@@ -64,6 +69,7 @@ angular.module('geek', ['spotify'])
 
               var track = $scope.tracks[index].track;
 
+              // Get any existing scores for this track.
               if (track.id in $scope.scoresLookup) {
                 $scope.tracks[index].hit = $scope.scoresLookup[track.id].hit;
                 $scope.tracks[index].miss = $scope.scoresLookup[track.id].miss;
@@ -74,45 +80,61 @@ angular.module('geek', ['spotify'])
         }
       };
 
+      /**
+       * Log the user in to Spotify.
+       */
       $scope.login = function () {
         Spotify.login().then(function (data) {
 
           $scope.authenticated = true;
 
+          // Now that we've logged in, we can build the playlist.
           $scope.updatePlaylist();
 
         }, function () {
-          console.log('didn\'t log in');
+          console.log('log in failed');
         })
       };
 
       $scope.hit = function (index) {
         $scope.tracks[index].hit++;
-
         var id = $scope.getTrackId(index)
-
         $scope.updateScores(id, 'hit');
-
       };
 
       $scope.miss = function (index) {
         $scope.tracks[index].miss++;
-
         var id = $scope.getTrackId(index)
         $scope.updateScores(id, 'miss');
       };
 
       $scope.maybe = function (index) {
         $scope.tracks[index].maybe++;
-
         var id = $scope.getTrackId(index)
         $scope.updateScores(id, 'maybe');
       };
 
+      /**
+       * Get the track's spotify ID from its playlist position.
+       *
+       * @param int index
+       *   The 0-based index of the track's position in the playlist.
+       *
+       * @returns string
+       *   The Spotify ID for the track.
+       */
       $scope.getTrackId = function (index) {
         return $scope.tracks[index].track.id;
       }
 
+      /**
+       * Persistently score a vote for a track.
+       *
+       * @param string trackId
+       *   The Spotify ID for the track.
+       * @param string updateType
+       *   hit, miss or maybe
+       */
       $scope.updateScores = function (trackId, updateType) {
         $http({
           url: 'updateScores.php',
