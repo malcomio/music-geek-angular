@@ -17,8 +17,8 @@ body {
   background-color: #f5f5f5;
 }
 
-.footer p {
-  margin: 1em;
+.footer .container > div {
+  padding: 1em;
 }
 
 .btn i {
