@@ -25,6 +25,13 @@
   </div>
   <div class="container">
 
+      <div class="row">
+        <div data-ng-if="!authenticated">
+          <button class="btn btn-primary"
+                  data-ng-click="login()">Login with Spotify to vote on tracks
+          </button>
+        </div>
+      </div>
 
     <h2 data-ng-bind="loadedPlaylist.name"></h2>
 
@@ -106,9 +113,12 @@
 </div>
 <footer class="footer">
   <div class="container">
-    <p class="text-muted">
-      Hacked together by <a href="http://twitter.com/malcomio">Malcolm Young</a>
-    </p>
+    <div class="col-md-8">
+      <p class="text-muted">
+        Hacked together by <a href="http://twitter.com/malcomio">Malcolm Young</a>
+      </p>
+
+    </div>
   </div>
 </footer>
 
