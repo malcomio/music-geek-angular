@@ -16,6 +16,7 @@ angular.module('geek', ['spotify'])
       $scope.scores = []
       $scope.scoresLookup = {};
 
+      // Get all the playlists.
       $http.get('data/playlists.json')
         .then(function (res) {
           $scope.playlists = res.data.playlists;
@@ -30,9 +31,10 @@ angular.module('geek', ['spotify'])
           $scope.updatePlaylist();
         });
 
-
+      // Get all the scores.
       $http.get('data/scores.json')
         .then(function (res) {
+          console.log(res);
           $scope.scores = res.data.scores;
           for (var i = 0, len = $scope.scores.length; i < len; i++) {
             $scope.scoresLookup[$scope.scores[i].id] = $scope.scores[i];
@@ -86,6 +88,15 @@ angular.module('geek', ['spotify'])
       $scope.login = function () {
         Spotify.login().then(function (data) {
 
+          Spotify.getCurrentUser().then(function( userData) {
+            $scope.user = {
+              'id': userData.id,
+              'name': userData.display_name,
+              'image': userData.images[0].url
+            };
+          });
+
+          console.log($scope.user);
           $scope.authenticated = true;
 
           // Now that we've logged in, we can build the playlist.
@@ -98,6 +109,7 @@ angular.module('geek', ['spotify'])
 
       $scope.hit = function (index) {
         $scope.tracks[index].hit++;
+        $scope.votes[index] = true;
         var id = $scope.getTrackId(index)
         $scope.updateScores(id, 'hit');
       };
