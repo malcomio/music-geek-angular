@@ -1,6 +1,8 @@
 <!doctype html>
 <html data-ng-app="geek">
 <head>
+  <title>Music Geek Monthly</title>
+
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet"
@@ -8,54 +10,59 @@
   <link rel="stylesheet" href="geek.css">
 </head>
 <body>
-<div data-ng-controller="geekController as geek" class="container">
-
-  <h1>Music Geek Monthly</h1>
-
-  <h2 data-ng-bind="loadedPlaylist.name"></h2>
-
-  <select
-    data-ng-options="list.id as list.name for list in playlists track by list.id"
-    data-ng-model="selectedPlaylist"
-    data-ng-change="updatePlaylist()"></select>
-
-
-  <div data-ng-if="!authenticated">
-    <button class="btn btn-primary"
-            data-ng-click="login()">Login with Spotify to vote on tracks
-    </button>
-    <p>Unfortunately you have to authenticate every time...</p>
+<div data-ng-controller="geekController as geek">
+  <div class="navbar navbar-inverse">
+    <div class="container">
+      <div class="navbar-brand">
+        Music Geek Monthly
+      </div>
+      <div data-ng-if="!authenticated" class="navbar-form navbar-right">
+        <button class="btn btn-primary"
+                data-ng-click="login()">Login with Spotify to vote on tracks
+        </button>
+      </div>
+    </div>
   </div>
+  <div class="container">
 
-  <div class="row">
-    <div class="col-md-8 col-sm-6" data-ng-if="authenticated">
-      <div class="tracks">
-        <div class="track" data-ng-repeat="track in tracks"
-             data-ng-class="{even: $even, odd: $odd}">
-          <dl class="dl-horizontal">
-            <dt>Track name</dt>
-            <dd>
-              <a data-ng-href="{{ track.track.external_urls.spotify">
-                {{ track.track.name }}
-              </a>
-            </dd>
-            <dt>Artist</dt>
-            <dd>
-              <a
-                data-ng-href="{{ track.track.artists[0].external_urls.spotify }}">{{
-                track.track.artists[0].name }}</a>
-            </dd>
-            <dt>Album</dt>
-            <dd>
-              <a data-ng-href="{{ track.track.album.external_urls.spotify }}">
-                <img data-ng-if="authenticated"
-                     data-ng-src="{{ track.track.album.images[2].url }}"/>
-                {{ track.track.album.name }}
-              </a>
-            </dd>
 
-            <dt></dt>
-            <dd>
+    <h2 data-ng-bind="loadedPlaylist.name"></h2>
+
+    <select
+      data-ng-options="list.id as list.name for list in playlists track by list.id"
+      data-ng-model="selectedPlaylist"
+      data-ng-change="updatePlaylist()"></select>
+
+
+    <div class="row">
+      <div class="col-md-8 col-sm-6" data-ng-if="authenticated">
+        <div class="tracks">
+          <div class="track" data-ng-repeat="track in tracks"
+               data-ng-class="{even: $even, odd: $odd}">
+            <dl class="dl-horizontal">
+              <dt>Track name</dt>
+              <dd>
+                <a data-ng-href="{{ track.track.external_urls.spotify">
+                  {{ track.track.name }}
+                </a>
+              </dd>
+              <dt>Artist</dt>
+              <dd>
+                <a
+                  data-ng-href="{{ track.track.artists[0].external_urls.spotify }}">{{
+                  track.track.artists[0].name }}</a>
+              </dd>
+              <dt>Album</dt>
+              <dd>
+                <a data-ng-href="{{ track.track.album.external_urls.spotify }}">
+                  <img data-ng-if="authenticated"
+                       data-ng-src="{{ track.track.album.images[2].url }}"/>
+                  {{ track.track.album.name }}
+                </a>
+              </dd>
+
+              <dt></dt>
+              <dd>
               <span class="score-btn">
                 <button class="btn btn-success" data-ng-click="hit($index)"
                         data-attr="track-id"><i
@@ -77,20 +84,28 @@
               </button>
               <span class="score" data-ng-bind="track.maybe"></span>
                 </span>
-            </dd>
-          </dl>
+              </dd>
+            </dl>
 
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <iframe class="player"
-              data-ng-src="{{embedUrl}}" width="300"
-              height="380" frameborder="0" allowtransparency="true"></iframe>
-    </div>
+      <div class="col-md-4">
+        <iframe class="player"
+                data-ng-src="{{embedUrl}}" width="300"
+                height="380" frameborder="0" allowtransparency="true"></iframe>
+      </div>
 
+    </div>
   </div>
 </div>
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted">
+      Hacked together by <a href="http://twitter.com/malcomio">Malcolm Young</a>
+    </p>
+  </div>
+</footer>
 
 <script src="bower_components/angular/angular.min.js"></script>
 <script
