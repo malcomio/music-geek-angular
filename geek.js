@@ -1,7 +1,7 @@
 angular.module('geek', ['spotify'])
   .config(function (SpotifyProvider) {
   SpotifyProvider.setClientId('6e7388e0fab24447b832a4f0209c3929');
-  SpotifyProvider.setRedirectUri('http://tata.dev/geek/callback.html');
+  SpotifyProvider.setRedirectUri(window.location.origin + '/geek/callback.html');
   SpotifyProvider.setScope('playlist-read-private');
 
 })
