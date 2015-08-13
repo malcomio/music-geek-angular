@@ -53,7 +53,7 @@ angular.module('geek', ['spotify'])
 
         if ($scope.authenticated) {
 
-          Spotify.getPlaylist($scope.loadedPlaylist.owner, $scope.loadedPlaylist.id).then(function (data) {
+          Spotify.getPlaylist(playlist.owner.id, playlist.id).then(function (data) {
             console.log(data);
 
             $scope.playlist = data;
