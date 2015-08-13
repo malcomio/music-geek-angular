@@ -115,7 +115,7 @@ angular.module('geek', ['spotify'])
 
       $scope.updateScores = function (trackId, updateType) {
         $http({
-          url: 'geek.php',
+          url: 'updateScores.php',
           method: "GET",
           params: {'id': trackId, type: updateType}
         });
