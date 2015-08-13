@@ -3,7 +3,7 @@
   "main": "geek.js",
   "version": "0.0.0",
   "authors": [
-    "Malcolm Young <malcolm.young@capgemini.com>"
+    "Malcolm Young <malcolm@red-route.org>"
   ],
   "description": "Music Geek Monthly",
   "license": "MIT",
@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular-spotify": "~1.0.0"
+    "angular-spotify": "~1.0.0",
+    "angular-resource": "~1.4.3"
   }
 }
