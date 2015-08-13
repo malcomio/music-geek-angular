@@ -28,7 +28,12 @@
 
     <h2 data-ng-bind="loadedPlaylist.name"></h2>
 
+    <label for="playlist">
+      Select playlist
+    </label>
     <select
+      id="playlist"
+      name="playlist"
       data-ng-options="list.id as list.name for list in playlists track by list.id"
       data-ng-model="selectedPlaylist"
       data-ng-change="updatePlaylist()"></select>
