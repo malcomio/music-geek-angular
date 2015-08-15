@@ -78,9 +78,17 @@ angular.module('geek', ['spotify'])
                 var trackObject = $scope.scores[track.id];
 
                 // Get the totals.
-                $scope.tracks[index].hits = Object.keys(trackObject.hit).length;
-                $scope.tracks[index].misses = Object.keys(trackObject.miss).length;
-                $scope.tracks[index].maybes = Object.keys(trackObject.maybe).length;
+                if (typeof trackObject.hit !== 'undefined') {
+                  $scope.tracks[index].hits = Object.keys(trackObject.hit).length;
+                }
+
+                if (typeof trackObject.miss !== 'undefined') {
+                  $scope.tracks[index].misses = Object.keys(trackObject.miss).length;
+                }
+
+                if (typeof trackObject.maybe !== 'undefined') {
+                  $scope.tracks[index].maybes = Object.keys(trackObject.maybe).length;
+                }
 
                 if (typeof $scope.user !== 'undefined') {
                   // Check if the current user has voted.
@@ -112,12 +120,13 @@ angular.module('geek', ['spotify'])
               'name': userData.display_name,
               'image': userData.images[0].url
             };
+
+
+            // Now that we've logged in, we can build the playlist.
+            $scope.updatePlaylist($scope.selectedPlaylist);
           });
 
           $scope.authenticated = true;
-
-          // Now that we've logged in, we can build the playlist.
-          $scope.updatePlaylist($scope.selectedPlaylist);
 
         }, function () {
           console.log('log in failed');
