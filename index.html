@@ -83,14 +83,31 @@
 
               <dt></dt>
               <dd>
-                <div>
-                  <span class="score" data-ng-bind="track.hits"></span>
-                  <span class="score" data-ng-bind="track.misses"></span>
-                  <span class="score" data-ng-bind="track.maybes"></span>
-                  <span data-ng-bind="track.myVote"></span>
+                <div data-ng-if="track.myVote" class="track-scores">
+
+                  <span class="score-wrapper">
+                    <h3>Hits</h3>
+                    <span class="score score-hit" data-ng-bind="track.hits"></span>
+                  </span>
+
+                  <span class="score-wrapper">
+                    <h3>Misses</h3>
+                    <span class="score score-miss" data-ng-bind="track.misses"></span>
+                  </span>
+
+                  <span class="score-wrapper">
+                    <h3>Maybes</h3>
+                    <span class="score score-maybe" data-ng-bind="track.maybes"></span>
+                    </span>
+
+                  <span class="score-wrapper">
+                    <h3>My vote</h3>
+                    <span class="score score-me" data-ng-class="track.myVote" data-ng-bind="track.myVote"></span>
+                  </span>
                 </div>
 
-                <div>
+
+                <div data-ng-if="!track.myVote" class="score-buttons">
 
 
               <span class="score-btn">

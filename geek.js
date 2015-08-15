@@ -69,7 +69,7 @@ angular.module('geek', ['spotify'])
             $scope.tracks = data.tracks.items;
 
             for (var index in $scope.tracks) {
-              $scope.tracks[index].hit = $scope.tracks[index].miss = $scope.tracks[index].maybe = 0;
+              $scope.tracks[index].hits = $scope.tracks[index].misses = $scope.tracks[index].maybes = 0;
 
               var track = $scope.tracks[index].track;
 
@@ -92,13 +92,13 @@ angular.module('geek', ['spotify'])
 
                 if (typeof $scope.user !== 'undefined') {
                   // Check if the current user has voted.
-                  if (trackObject.hit[$scope.user.id]) {
+                  if (trackObject.hasOwnProperty('hit') && trackObject.hit[$scope.user.id]) {
                     $scope.tracks[index].myVote = 'hit';
                   }
-                  if (trackObject.miss[$scope.user.id]) {
+                  if (trackObject.hasOwnProperty('miss') && trackObject.miss[$scope.user.id]) {
                     $scope.tracks[index].myVote = 'miss';
                   }
-                  if (trackObject.maybe[$scope.user.id]) {
+                  if (trackObject.hasOwnProperty('maybe') && trackObject.maybe[$scope.user.id]) {
                     $scope.tracks[index].myVote = 'maybe';
                   }
                 }
@@ -161,6 +161,19 @@ angular.module('geek', ['spotify'])
         $scope.updateScores(id, $scope.user.id, vote);
 
         $scope.tracks[index].myVote = vote;
+
+        switch (vote) {
+          case 'hit':
+            $scope.tracks[index].hits++;
+            break;
+
+          case 'miss':
+            $scope.tracks[index].misses++;
+            break;
+
+          case 'maybe':
+            $scope.tracks[index].maybes++;
+        }
       }
 
       /**
