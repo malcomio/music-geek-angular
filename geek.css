@@ -25,6 +25,10 @@ body {
   margin-right: 1em;
 }
 
+.user__image {
+  max-width: 5em;
+}
+
 .tracks {
   margin: 1em;
   border: 1px solid #000;

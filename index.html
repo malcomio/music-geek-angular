@@ -21,6 +21,11 @@
                 data-ng-click="login()">Login with Spotify to vote on tracks
         </button>
       </div>
+
+      <div data-ng-if="authenticated" class="navbar-form navbar-right">
+        {{ user.name }}
+        <img data-ng-src="{{ user.image }}" class="user__image"/>
+      </div>
     </div>
   </div>
   <div class="container">
@@ -75,22 +80,23 @@
 
               <dt></dt>
               <dd>
+                <span data-ng-bind="track.myVote"></span>
               <span class="score-btn">
-                <button class="btn btn-success" data-ng-click="hit($index)"
+                <button class="btn btn-success"
+                        data-ng-click="score('hit', $index)"
                         data-attr="track-id"><i
                   class="fa fa-thumbs-o-up"></i>Hit
                 </button>
               <span class="score" data-ng-bind="track.hit"></span>
-              </span>
 <span class="score-btn">
-              <button class="btn btn-danger" data-ng-click="miss($index)"
+              <button class="btn btn-danger" data-ng-click="score('miss', $index)"
                       data-attr="track-id"><i
                 class="fa fa-thumbs-o-down"></i>Miss
               </button>
               <span class="score" data-ng-bind="track.miss"></span>
 </span>
               <span class="score-btn">
-              <button class="btn btn-info" data-ng-click="maybe($index)"
+              <button class="btn btn-info" data-ng-click="score('maybe', $index)"
                       data-attr="track-id"><i
                 class="fa fa-question"></i>Maybe
               </button>

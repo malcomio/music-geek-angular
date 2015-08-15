@@ -28,13 +28,12 @@ angular.module('geek', ['spotify'])
           $scope.selectedPlaylist = $scope.playlists[0];
 
           // Try to
-          $scope.updatePlaylist();
+          $scope.updatePlaylist($scope.selectedPlaylist);
         });
 
       // Get all the scores.
       $http.get('data/scores.json')
         .then(function (res) {
-          console.log(res);
           $scope.scores = res.data.scores;
           for (var i = 0, len = $scope.scores.length; i < len; i++) {
             $scope.scoresLookup[$scope.scores[i].id] = $scope.scores[i];
@@ -48,20 +47,23 @@ angular.module('geek', ['spotify'])
        */
       $scope.updatePlaylist = function (playlist) {
 
-        if (typeof playlist === 'undefined') {
-          playlist = $scope.selectedPlaylist;
+        // Update the embedded playlist.
+        // TODO:
+        if (typeof playlist === 'string') {
+          playlist = $scope.playlistsLookup[playlist];
         }
 
-        // Update the embedded playlist.
+        $scope.loadedPlaylist = playlist;
+
+
         var embedUrl = "https://embed.spotify.com/?uri=spotify%3Auser%3A" + playlist.owner.id + "%3Aplaylist%3A" + playlist.id;
         $scope.embedUrl = $sce.trustAsResourceUrl(embedUrl);
 
-        $scope.loadedPlaylist = $scope.playlistsLookup[playlist];
+
 
         if ($scope.authenticated) {
 
           Spotify.getPlaylist(playlist.owner.id, playlist.id).then(function (data) {
-            console.log(data);
 
             $scope.playlist = data;
             $scope.tracks = data.tracks.items;
@@ -72,10 +74,26 @@ angular.module('geek', ['spotify'])
               var track = $scope.tracks[index].track;
 
               // Get any existing scores for this track.
-              if (track.id in $scope.scoresLookup) {
-                $scope.tracks[index].hit = $scope.scoresLookup[track.id].hit;
-                $scope.tracks[index].miss = $scope.scoresLookup[track.id].miss;
-                $scope.tracks[index].maybe = $scope.scoresLookup[track.id].maybe;
+              if (track.id in $scope.scores) {
+                var trackObject = $scope.scores[track.id];
+
+                // Get the totals.
+                $scope.tracks[index].hits = Object.keys(trackObject.hit).length;
+                $scope.tracks[index].misses = Object.keys(trackObject.miss).length;
+                $scope.tracks[index].maybes = Object.keys(trackObject.maybe).length;
+
+                if (typeof $scope.user !== 'undefined') {
+                  // Check if the current user has voted.
+                  if (trackObject.hit[$scope.user.id]) {
+                    $scope.tracks[index].myVote = 'hit';
+                  }
+                  if (trackObject.miss[$scope.user.id]) {
+                    $scope.tracks[index].myVote = 'miss';
+                  }
+                  if (trackObject.maybe[$scope.user.id]) {
+                    $scope.tracks[index].myVote = 'maybe';
+                  }
+                }
               }
             }
           });
@@ -96,34 +114,14 @@ angular.module('geek', ['spotify'])
             };
           });
 
-          console.log($scope.user);
           $scope.authenticated = true;
 
           // Now that we've logged in, we can build the playlist.
-          $scope.updatePlaylist();
+          $scope.updatePlaylist($scope.selectedPlaylist);
 
         }, function () {
           console.log('log in failed');
         })
-      };
-
-      $scope.hit = function (index) {
-        $scope.tracks[index].hit++;
-        $scope.votes[index] = true;
-        var id = $scope.getTrackId(index)
-        $scope.updateScores(id, 'hit');
-      };
-
-      $scope.miss = function (index) {
-        $scope.tracks[index].miss++;
-        var id = $scope.getTrackId(index)
-        $scope.updateScores(id, 'miss');
-      };
-
-      $scope.maybe = function (index) {
-        $scope.tracks[index].maybe++;
-        var id = $scope.getTrackId(index)
-        $scope.updateScores(id, 'maybe');
       };
 
       /**
@@ -140,18 +138,43 @@ angular.module('geek', ['spotify'])
       }
 
       /**
-       * Persistently score a vote for a track.
+       * Count a vote for a track.
+       *
+       * @param string vote
+       *   Hit, miss or maybe.
+       *
+       * @param index
+       *   The 0-based index of the track's position in the playlist.
+       */
+      $scope.score = function(vote, index) {
+        $scope.tracks[index][vote]++;
+        var id = $scope.getTrackId(index)
+        $scope.updateScores(id, $scope.user.id, vote);
+
+        $scope.tracks[index].myVote = vote;
+      }
+
+      /**
+       * Persistently store a vote for a track.
        *
        * @param string trackId
        *   The Spotify ID for the track.
-       * @param string updateType
+       * @param string userId
+       *   The Spotify user ID voting.
+       * @param string vote
        *   hit, miss or maybe
        */
-      $scope.updateScores = function (trackId, updateType) {
+      $scope.updateScores = function (trackId, userId, vote) {
         $http({
           url: 'updateScores.php',
           method: "GET",
-          params: {'id': trackId, type: updateType}
+          params: {
+            'id': trackId,
+            'user': userId,
+            type: vote
+          }
+        }).then(function (data) {
+
         });
       };
 
