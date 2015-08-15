@@ -48,7 +48,7 @@
       name="playlist"
       data-ng-options="list.id as list.name for list in playlists track by list.id"
       data-ng-model="selectedPlaylist"
-      data-ng-change="updatePlaylist()"></select>
+      data-ng-change="updatePlaylist(selectedPlaylist)"></select>
 
 
     <div class="row">
@@ -78,9 +78,12 @@
                 </a>
               </dd>
 
+
               <dt></dt>
               <dd>
                 <span data-ng-bind="track.myVote"></span>
+                <div data-ng-if="!track.myVote">
+
               <span class="score-btn">
                 <button class="btn btn-success"
                         data-ng-click="score('hit', $index)"
@@ -88,6 +91,7 @@
                   class="fa fa-thumbs-o-up"></i>Hit
                 </button>
               <span class="score" data-ng-bind="track.hit"></span>
+                </span>
 <span class="score-btn">
               <button class="btn btn-danger" data-ng-click="score('miss', $index)"
                       data-attr="track-id"><i
@@ -102,6 +106,8 @@
               </button>
               <span class="score" data-ng-bind="track.maybe"></span>
                 </span>
+
+                </div>
               </dd>
             </dl>
 
