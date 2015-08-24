@@ -38,6 +38,8 @@
       </div>
     </div>
 
+    <div data-ng-if="notifications" class="alert alert-success" role="alert">{{ notifications }}</div>
+
     <h2 data-ng-bind="loadedPlaylist.name"></h2>
 
     <label for="playlist">
@@ -49,6 +51,8 @@
       data-ng-options="list.id as list.name for list in playlists track by list.id"
       data-ng-model="selectedPlaylist"
       data-ng-change="updatePlaylist(selectedPlaylist)"></select>
+
+    <div data-ng-include="'playlist-form.html'" data-ng-if="authenticated"></div>
 
 
     <div class="row">

@@ -15,21 +15,26 @@ angular.module('geek', ['spotify'])
       $scope.playlistsLookup = {};
       $scope.scores = []
       $scope.scoresLookup = {};
+      $scope.notifications = '';
 
-      // Get all the playlists.
-      $http.get('data/playlists.json')
-        .then(function (res) {
-          $scope.playlists = res.data.playlists;
-          for (var i = 0, len = $scope.playlists.length; i < len; i++) {
-            $scope.playlistsLookup[$scope.playlists[i].id] = $scope.playlists[i];
-          }
+      /**
+       * Get all the playlists.
+       */
+      $scope.getPlaylists = function () {
+        $http.get('data/playlists.json')
+          .then(function (res) {
+            $scope.playlists = res.data.playlists;
+            for (var i = 0, len = $scope.playlists.length; i < len; i++) {
+              $scope.playlistsLookup[$scope.playlists[i].id] = $scope.playlists[i];
+            }
 
-          // Set the first playlist as selected by default.
-          $scope.selectedPlaylist = $scope.playlists[0];
+            // Set the first playlist as selected by default.
+            $scope.selectedPlaylist = $scope.playlists[0];
 
-          // Try to
-          $scope.updatePlaylist($scope.selectedPlaylist);
-        });
+            // Try to
+            $scope.updatePlaylist($scope.selectedPlaylist);
+          });
+      }
 
       // Get all the scores.
       $http.get('data/scores.json')
@@ -107,6 +112,67 @@ angular.module('geek', ['spotify'])
           });
         }
       };
+
+      $scope.addPlaylist = function (playlistUri) {
+        $scope.notifications = '';
+        var userId = '',
+          playlistId = '';
+
+        // Playlist link format: https://open.spotify.com/user/fuzzylogic1981/playlist/4IwLqPHReJDvdLa91n1NNV
+        var playlistLink = playlistUri.split('/');
+        if (playlistLink.length == 7) {
+          userId = playlistLink[4];
+          playlistId = playlistLink[6];
+        }
+
+        // Spotify URI format: spotify:user:fuzzylogic1981:playlist:4IwLqPHReJDvdLa91n1NNV
+
+        var spotifyUri = playlistUri.split(':');
+        if (spotifyUri.length == 5) {
+          userId = spotifyUri[2];
+          playlistId = spotifyUri[4];
+        }
+
+        Spotify.getPlaylist(userId, playlistId).then(function (playlist) {
+          $scope.storePlaylist(playlist.id, userId, playlist.name);
+        });
+      };
+
+
+      /**
+       * Store a newly-added playlist.
+       *
+       * @param string playlistId
+       *   The Spotify ID for the track.
+       * @param string userId
+       *   The Spotify user ID voting.
+       * @param string playlistName
+       *   hit, miss or maybe
+       */
+      $scope.storePlaylist = function (playlistId, userId, playlistName) {
+        $http({
+          url: 'addPlaylist.php',
+          method: "GET",
+          params: {
+            id: playlistId,
+            user: userId,
+            name: playlistName
+          }
+        }).then(function (data) {
+
+          switch (data.status) {
+            case 201:
+              $scope.notifications = "The playlist " + playlistName + " by " + userId + " has been added.";
+              $scope.getPlaylists();
+              break;
+
+            case 200:
+              $scope.notifications = "The playlist " + playlistName + " by " + userId + " is already on the list.";
+          }
+
+        });
+      };
+
 
       /**
        * Log the user in to Spotify.
@@ -199,6 +265,16 @@ angular.module('geek', ['spotify'])
 
         });
       };
+
+
+
+
+
+
+
+      $scope.getPlaylists();
+
+
 
     }
   ]);
