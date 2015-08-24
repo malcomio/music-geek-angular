@@ -34,16 +34,20 @@ angular.module('geek', ['spotify'])
             // Try to
             $scope.updatePlaylist($scope.selectedPlaylist);
           });
-      }
+      };
 
-      // Get all the scores.
-      $http.get('data/scores.json')
-        .then(function (res) {
-          $scope.scores = res.data.scores;
-          for (var i = 0, len = $scope.scores.length; i < len; i++) {
-            $scope.scoresLookup[$scope.scores[i].id] = $scope.scores[i];
-          }
-        });
+      /**
+       * Get all the scores.
+       */
+      $scope.getScores = function () {
+        $http.get('data/scores.json')
+          .then(function (res) {
+            $scope.scores = res.data.scores;
+            for (var i = 0, len = $scope.scores.length; i < len; i++) {
+              $scope.scoresLookup[$scope.scores[i].id] = $scope.scores[i];
+            }
+          });
+      };
 
       /**
        * React to a change of playlist.
@@ -67,7 +71,6 @@ angular.module('geek', ['spotify'])
 
 
         if ($scope.authenticated) {
-
           Spotify.getPlaylist(playlist.owner.id, playlist.id).then(function (data) {
 
             $scope.playlist = data;
@@ -277,11 +280,9 @@ angular.module('geek', ['spotify'])
 
 
 
-
+      // Initialise the app.
       $scope.getPlaylists();
-
-
-
+      $scope.getScores();
     }
   ]);
 
