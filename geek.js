@@ -11,9 +11,9 @@ angular.module('geek', ['spotify'])
 
       // Initialise scope variables.
       $scope.authenticated = false;
-      $scope.playlists = []
+      $scope.playlists = [];
       $scope.playlistsLookup = {};
-      $scope.scores = []
+      $scope.scores = [];
       $scope.scoresLookup = {};
       $scope.notifications = '';
 
@@ -119,7 +119,7 @@ angular.module('geek', ['spotify'])
       /**
        * Add a playlist.
        *
-       * @param string playlistUri
+       * @param {string} playlistUri
        *   The URI of the playlist, either as playlist link or Spotify URI.
        */
       $scope.addPlaylist = function (playlistUri) {
@@ -151,11 +151,11 @@ angular.module('geek', ['spotify'])
       /**
        * Store a newly-added playlist.
        *
-       * @param string playlistId
+       * @param {string} playlistId
        *   The Spotify ID for the track.
-       * @param string userId
+       * @param {string} userId
        *   The Spotify user ID voting.
-       * @param string playlistName
+       * @param {string} playlistName
        *   hit, miss or maybe
        */
       $scope.storePlaylist = function (playlistId, userId, playlistName) {
@@ -187,7 +187,7 @@ angular.module('geek', ['spotify'])
        * Log the user in to Spotify.
        */
       $scope.login = function () {
-        Spotify.login().then(function (data) {
+        Spotify.login().then(function () {
 
           Spotify.getCurrentUser().then(function( userData) {
             $scope.user = {
@@ -211,7 +211,7 @@ angular.module('geek', ['spotify'])
       /**
        * Get the track's spotify ID from its playlist position.
        *
-       * @param int index
+       * @param {int} index
        *   The 0-based index of the track's position in the playlist.
        *
        * @returns string
@@ -219,20 +219,20 @@ angular.module('geek', ['spotify'])
        */
       $scope.getTrackId = function (index) {
         return $scope.tracks[index].track.id;
-      }
+      };
 
       /**
        * Count a vote for a track.
        *
-       * @param string vote
+       * @param {string} vote
        *   Hit, miss or maybe.
        *
-       * @param index
+       * @param {int} index
        *   The 0-based index of the track's position in the playlist.
        */
       $scope.score = function(vote, index) {
         $scope.tracks[index][vote]++;
-        var id = $scope.getTrackId(index)
+        var id = $scope.getTrackId(index);
         $scope.updateScores(id, $scope.user.id, vote);
 
         $scope.tracks[index].myVote = vote;
@@ -249,16 +249,16 @@ angular.module('geek', ['spotify'])
           case 'maybe':
             $scope.tracks[index].maybes++;
         }
-      }
+      };
 
       /**
        * Persistently store a vote for a track.
        *
-       * @param string trackId
+       * @param {string} trackId
        *   The Spotify ID for the track.
-       * @param string userId
+       * @param {string} userId
        *   The Spotify user ID voting.
-       * @param string vote
+       * @param {string} vote
        *   hit, miss or maybe
        */
       $scope.updateScores = function (trackId, userId, vote) {
@@ -274,9 +274,6 @@ angular.module('geek', ['spotify'])
 
         });
       };
-
-
-
 
 
 
