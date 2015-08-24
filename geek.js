@@ -113,6 +113,12 @@ angular.module('geek', ['spotify'])
         }
       };
 
+      /**
+       * Add a playlist.
+       *
+       * @param string playlistUri
+       *   The URI of the playlist, either as playlist link or Spotify URI.
+       */
       $scope.addPlaylist = function (playlistUri) {
         $scope.notifications = '';
         var userId = '',
