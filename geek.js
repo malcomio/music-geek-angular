@@ -266,15 +266,14 @@ angular.module('geek', ['spotify'])
           url: 'updateScores.php',
           method: "GET",
           params: {
-            'id': trackId,
-            'user': userId,
+            id: trackId,
+            user: userId,
             type: vote
           }
         }).then(function (data) {
 
         });
       };
-
 
 
       // Initialise the app.
