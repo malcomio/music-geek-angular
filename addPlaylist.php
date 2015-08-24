@@ -30,8 +30,7 @@ if (!function_exists('array_column')) {
    *                        of the column, or it may be the string key name.
    * @return array
    */
-  function array_column($input = null, $columnKey = null, $indexKey = null)
-  {
+  function array_column($input = NULL, $columnKey = NULL, $indexKey = NULL) {
     // Using func_get_args() in order to check for proper number of
     // parameters and trigger errors exactly as the built-in array_column()
     // does in PHP 5.5.
@@ -40,7 +39,7 @@ if (!function_exists('array_column')) {
 
     if ($argc < 2) {
       trigger_error("array_column() expects at least 2 parameters, {$argc} given", E_USER_WARNING);
-      return null;
+      return NULL;
     }
 
     if (!is_array($params[0])) {
@@ -48,17 +47,17 @@ if (!function_exists('array_column')) {
         'array_column() expects parameter 1 to be array, ' . gettype($params[0]) . ' given',
         E_USER_WARNING
       );
-      return null;
+      return NULL;
     }
 
     if (!is_int($params[1])
       && !is_float($params[1])
       && !is_string($params[1])
-      && $params[1] !== null
+      && $params[1] !== NULL
       && !(is_object($params[1]) && method_exists($params[1], '__toString'))
     ) {
       trigger_error('array_column(): The column key should be either a string or an integer', E_USER_WARNING);
-      return false;
+      return FALSE;
     }
 
     if (isset($params[2])
@@ -68,17 +67,18 @@ if (!function_exists('array_column')) {
       && !(is_object($params[2]) && method_exists($params[2], '__toString'))
     ) {
       trigger_error('array_column(): The index key should be either a string or an integer', E_USER_WARNING);
-      return false;
+      return FALSE;
     }
 
     $paramsInput = $params[0];
-    $paramsColumnKey = ($params[1] !== null) ? (string) $params[1] : null;
+    $paramsColumnKey = ($params[1] !== NULL) ? (string) $params[1] : NULL;
 
-    $paramsIndexKey = null;
+    $paramsIndexKey = NULL;
     if (isset($params[2])) {
       if (is_float($params[2]) || is_int($params[2])) {
         $paramsIndexKey = (int) $params[2];
-      } else {
+      }
+      else {
         $paramsIndexKey = (string) $params[2];
       }
     }
@@ -86,26 +86,28 @@ if (!function_exists('array_column')) {
     $resultArray = array();
 
     foreach ($paramsInput as $row) {
-      $key = $value = null;
-      $keySet = $valueSet = false;
+      $key = $value = NULL;
+      $keySet = $valueSet = FALSE;
 
-      if ($paramsIndexKey !== null && array_key_exists($paramsIndexKey, $row)) {
-        $keySet = true;
+      if ($paramsIndexKey !== NULL && array_key_exists($paramsIndexKey, $row)) {
+        $keySet = TRUE;
         $key = (string) $row[$paramsIndexKey];
       }
 
-      if ($paramsColumnKey === null) {
-        $valueSet = true;
+      if ($paramsColumnKey === NULL) {
+        $valueSet = TRUE;
         $value = $row;
-      } elseif (is_array($row) && array_key_exists($paramsColumnKey, $row)) {
-        $valueSet = true;
+      }
+      elseif (is_array($row) && array_key_exists($paramsColumnKey, $row)) {
+        $valueSet = TRUE;
         $value = $row[$paramsColumnKey];
       }
 
       if ($valueSet) {
         if ($keySet) {
           $resultArray[$key] = $value;
-        } else {
+        }
+        else {
           $resultArray[] = $value;
         }
       }
@@ -146,25 +148,19 @@ if (!empty($_GET['id'])) {
     // Check if the playlist is already in the list before adding.
     $existing_playlists = array_column($json['playlists'], 'id');
     if (in_array($playlist_id, $existing_playlists)) {
-      header('Playlist already exists');
 
     }
     else {
-      header('Playlist added', TRUE, 201);
       array_unshift($json['playlists'], $new_playlist);
+
+      $json_output = json_encode($json);
+
+      $fp = fopen($file, 'w');
+      if (fwrite($fp, $json_output)) {
+        header($_SERVER['SERVER_PROTOCOL'] . ' 201 Created');
+      }
+      fclose($fp);
+
     }
   }
 }
-
-$json_output = json_encode($json);
-
-$fp = fopen($file, 'w');
-fwrite($fp, $json_output);
-fclose($fp);
-
-
-
-
-
-
-
