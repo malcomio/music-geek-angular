@@ -14,7 +14,6 @@ angular.module('geek', ['spotify'])
       $scope.playlists = [];
       $scope.playlistsLookup = {};
       $scope.scores = [];
-      $scope.scoresLookup = {};
       $scope.notifications = '';
 
       /**
@@ -43,9 +42,6 @@ angular.module('geek', ['spotify'])
         $http.get('data/scores.json')
           .then(function (res) {
             $scope.scores = res.data.scores;
-            for (var i = 0, len = $scope.scores.length; i < len; i++) {
-              $scope.scoresLookup[$scope.scores[i].id] = $scope.scores[i];
-            }
           });
       };
 
