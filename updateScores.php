@@ -18,7 +18,15 @@ if (!empty($_GET['id'])) {
       case 'maybe':
         if ($id && $update_type && $user_id) {
           $json['scores'][$id][$update_type][$user_id] = $user_id;
+
+          if (empty($json['scores'][$id]['count'][$update_type])) {
+            $json['scores'][$id]['count'][$update_type] = 1;
+          }
+          else {
+            $json['scores'][$id]['count'][$update_type]++;
+          }
         }
+        break;
     }
   }
 }
