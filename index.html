@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="geek.css">
 </head>
 <body>
-<div data-ng-controller="geekController as geek">
+<div data-ng-controller="geekController as geek" class="music-geek-monthly">
   <div class="navbar navbar-inverse">
     <div class="container">
       <div class="navbar-brand">
@@ -109,35 +109,7 @@
                 </div>
 
 
-                <div data-ng-if="!track.myVote" class="score-buttons">
-
-
-              <span class="score-btn">
-                <button class="btn btn-success"
-                        data-ng-click="score('hit', $index)"
-                        data-attr="track-id"><i
-                  class="fa fa-thumbs-o-up"></i>Hit
-                </button>
-
-                </span>
-<span class="score-btn">
-              <button class="btn btn-danger"
-                      data-ng-click="score('miss', $index)"
-                      data-attr="track-id"><i
-                class="fa fa-thumbs-o-down"></i>Miss
-              </button>
-
-</span>
-              <span class="score-btn">
-              <button class="btn btn-info"
-                      data-ng-click="score('maybe', $index)"
-                      data-attr="track-id"><i
-                class="fa fa-question"></i>Maybe
-              </button>
-
-                </span>
-
-                </div>
+                <div data-ng-if="!track.myVote" class="score-buttons" data-ng-include="'score-buttons.html'"></div>
               </dd>
             </dl>
 
@@ -155,23 +127,25 @@
 </div>
 <footer class="footer">
   <div class="container">
-    <div class="col-md-8">
-      <p class="text-muted">
-        Hacked together by <a href="http://twitter.com/malcomio">Malcolm
-        Young</a> using <a href="">Angular</a>, <a
-        href="http://getbootstrap.com/">Bootstrap</a>, and <a
-        href="https://github.com/eddiemoore/angular-spotify">the Spotify API</a>.
-      </p>
-    </div>
-    <div class="col-md-4">
+    <div class="row">
+      <div class="col-md-8">
+        <p class="text-muted">
+          Hacked together by <a href="http://twitter.com/malcomio">Malcolm
+          Young</a> using <a href="">Angular</a>, <a
+          href="http://getbootstrap.com/">Bootstrap</a>, and <a
+          href="https://github.com/eddiemoore/angular-spotify">the Spotify API</a>.
+        </p>
+      </div>
+      <div class="col-md-4">
 
-      <ul class="list-unstyled">
-        <li><a href="https://github.com/malcomio/music-geek-angular/issues">Feature
-          requests and bug reports</a></li>
-        <li><a
-          href="https://www.facebook.com/groups/188596214497717/1063569163667080">Music
-          Geek Monthly facebook group</a></li>
-      </ul>
+        <ul class="list-unstyled">
+          <li><a href="https://github.com/malcomio/music-geek-angular/issues">Feature
+            requests and bug reports</a></li>
+          <li><a
+            href="https://www.facebook.com/groups/188596214497717/1063569163667080">Music
+            Geek Monthly facebook group</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </footer>
