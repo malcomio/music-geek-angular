@@ -1,0 +1,17 @@
+<div class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-brand">
+      Music Geek Monthly
+    </div>
+    <div data-ng-if="!authenticated" class="navbar-form navbar-right">
+      <button class="btn btn-primary"
+              data-ng-click="login()">Login with Spotify to vote on tracks
+      </button>
+    </div>
+
+    <div data-ng-if="authenticated" class="navbar-form navbar-right">
+      {{ user.name }}
+      <img data-ng-src="{{ user.image }}" class="user__image"/>
+    </div>
+  </div>
+</div>
