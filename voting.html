@@ -1,0 +1,39 @@
+<div class="row">
+  <div data-ng-if="!authenticated">
+    <button class="btn btn-primary"
+            data-ng-click="login()">Login with Spotify to vote on tracks
+    </button>
+  </div>
+</div>
+
+<div data-ng-if="notifications" class="alert alert-success" role="alert">{{ notifications }}</div>
+
+<h2 data-ng-bind="loadedPlaylist.name"></h2>
+
+<label for="playlist">
+  Select playlist
+</label>
+<select
+  id="playlist"
+  name="playlist"
+  data-ng-options="list.id as list.name for list in playlists track by list.id"
+  data-ng-model="selectedPlaylist"
+  data-ng-change="updatePlaylist(selectedPlaylist)"></select>
+
+<div data-ng-include="'playlist-form.html'" data-ng-if="authenticated"></div>
+
+
+<div class="row">
+  <div class="col-md-8 col-sm-6" data-ng-if="authenticated">
+    <p>
+      Scores are shown after you've voted.
+    </p>
+
+    <div class="tracks" data-ng-include="'tracks.html'"></div>
+  </div>
+  <div class="col-md-4">
+    <iframe class="player"
+            data-ng-src="{{embedUrl}}" width="300"
+            height="380" frameborder="0" allowtransparency="true"></iframe>
+  </div>
+</div>

@@ -278,3 +278,33 @@ geekApp.controller('geekController', [
     $scope.getScores();
   }
 ]);
+
+
+geekApp.config(function ($routeProvider, $locationProvider) {
+  $routeProvider
+    .when('/', {
+      templateUrl: 'voting.html',
+      controller: 'geekController'
+    })
+
+    .when('/playlists', {
+      templateUrl: 'playlists.html',
+      controller: 'playlistsController'
+    })
+
+    .when('/results', {
+      templateUrl: 'results.html',
+      controller: 'resultsController'
+    });
+
+});
+
+geekApp.controller('playlistsController', '$scope', '$http', '$sce', 'Spotify', function ($scope, $http, $sce, Spotify) {
+
+  
+});
+
+geekApp.controller('resultsController', '$scope', '$http', '$sce', 'Spotify', function ($scope, $http, $sce, Spotify) {
+
+});
+
