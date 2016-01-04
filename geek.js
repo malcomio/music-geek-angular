@@ -7,9 +7,17 @@ geekApp.config(function (SpotifyProvider) {
 
 })
 
+geekApp.factory('ScoresService', function($http) {
+  return {
+    all: function() {
+      return $http.get('data/scores.json');
+    }
+  };
+});
+
 geekApp.controller('geekController', [
-  '$scope', '$http', '$sce', 'Spotify',
-  function ($scope, $http, $sce, Spotify) {
+  '$scope', '$http', '$sce', 'Spotify', 'ScoresService',
+  function ($scope, $http, $sce, Spotify, ScoresService) {
 
     // Initialise scope variables.
     $scope.authenticated = false;
@@ -280,6 +288,54 @@ geekApp.controller('geekController', [
 ]);
 
 
+
+geekApp.controller('playlistsController', '$scope', '$http', '$sce', 'Spotify', function ($scope, $http, $sce, Spotify) {
+
+});
+
+geekApp.controller('resultsController', ['$scope', '$http', '$sce', 'Spotify', 'ScoresService', function ($scope, $http, $sce, Spotify, ScoresService) {
+  
+  var getScores = function(data, status) {
+    var scores = [];
+    $scope.sortedScores = [],
+    $scope.scores = [];
+    
+    for (var index in data.scores) {
+      var trackObject = data.scores[index];
+      if (typeof trackObject.hit !== 'undefined') {
+        trackObject.hits = Object.keys(trackObject.hit).length;
+      }
+      else {
+        trackObject.hits = 0;
+      }
+      
+      if (typeof trackObject.id !== 'undefined'){
+        scores.push(trackObject);
+        $scope.scores[trackObject.id] = trackObject.hits;
+      }
+      
+      
+    }
+    
+    var tracks = scores.sort(function(obj1, obj2) {
+      return obj2.hits - obj1.hits;
+    });
+    
+    for (var index2 in tracks) {
+      Spotify.getTrack(tracks[index2].id).then(function (track) {
+        $scope.sortedScores.push(track);
+        
+      });
+    }
+        
+    
+  };
+  
+  ScoresService.all().success(getScores);
+  
+}]);
+
+
 geekApp.config(function ($routeProvider, $locationProvider) {
   $routeProvider
     .when('/', {
@@ -294,17 +350,13 @@ geekApp.config(function ($routeProvider, $locationProvider) {
 
     .when('/results', {
       templateUrl: 'results.html',
-      controller: 'resultsController'
+      controller: 'resultsController',
     });
 
 });
 
-geekApp.controller('playlistsController', '$scope', '$http', '$sce', 'Spotify', function ($scope, $http, $sce, Spotify) {
-
-  
+geekApp.controller('navController', function($scope, $location) {
+  $scope.isActive = function(route) {
+    return route === $location.path();
+  }
 });
-
-geekApp.controller('resultsController', '$scope', '$http', '$sce', 'Spotify', function ($scope, $http, $sce, Spotify) {
-
-});
-

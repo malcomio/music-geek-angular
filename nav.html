@@ -13,5 +13,23 @@
       {{ user.name }}
       <img data-ng-src="{{ user.image }}" class="user__image"/>
     </div>
+    
+    <ul class="nav nav-pills" data-ng-controller="navController">
+      <li>
+        
+      </li>
+      <li data-ng-class="{active:isActive('/')}">
+        <a href="/#/">
+          Vote
+        </a>
+      </li>
+      <li data-ng-class="{active:isActive('/playlists')}">
+        <a href="/#/playlists">Playlists</a>
+      </li>
+      <li data-ng-class="{active:isActive('/results')}">
+        <a href="/#/results">Results</a>
+      </li>
+    </ul>
+    
   </div>
 </div>

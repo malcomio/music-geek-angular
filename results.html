@@ -1,0 +1,37 @@
+<h2>Top Tracks</h2>
+  
+  
+<table data-ng-table="tableParams" class="table">
+  <thead>
+    <th>Track</th>
+    <th>Artist</th>
+    <th>Album</th>
+    <th>Hits</th>
+  </thead>
+  <tr data-ng-repeat="track in sortedScores">
+    <td data-title="Name" sortable="name">
+      <a href="{{ track.external_urls.spotify }}" target="_blank">
+        {{ track.name }}
+      </a>      
+    </td>
+    <td>
+      <a href="{{ track.artists[0].external_urls.spotify }}" target="_blank">
+        {{ track.artists[0].name }}
+      </a>
+    </td>
+    <td>
+      <a href="{{ track.album.external_urls.spotify }}" target="_blank">
+        <img data-ng-src="{{ track.track.album.images[2].url }}"/>
+        {{ track.album.name }}
+      </a>        
+    </td>
+    <td data-title="Hits" sortable="'hits'">{{ scores[track.id] }}</td>
+  </tr>
+</table>
+
+  <table class="table">
+<tr data-ng-repeat="track in scores">
+  <td>{{ track.hits }}</td>
+  <td>{{ track.id }} </td>
+  </tr>
+  </table>
