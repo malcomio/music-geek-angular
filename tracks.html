@@ -3,19 +3,18 @@
   <dl class="dl-horizontal">
     <dt>Track name</dt>
     <dd>
-      <a data-ng-href="{{ track.track.external_urls.spotify }}">
+      <a data-ng-href="{{ track.track.external_urls.spotify }}" target="_blank">
         {{ track.track.name }}
       </a>
     </dd>
     <dt>Artist</dt>
     <dd>
-      <a
-        data-ng-href="{{ track.track.artists[0].external_urls.spotify }}">{{
-        track.track.artists[0].name }}</a>
+      <a data-ng-href="{{ track.track.artists[0].external_urls.spotify }}" target="_blank">
+        {{ track.track.artists[0].name }}</a>
     </dd>
     <dt>Album</dt>
     <dd>
-      <a data-ng-href="{{ track.track.album.external_urls.spotify }}">
+      <a data-ng-href="{{ track.track.album.external_urls.spotify }}" target="_blank">
         <img data-ng-if="authenticated"
              data-ng-src="{{ track.track.album.images[2].url }}"/>
         {{ track.track.album.name }}
@@ -26,32 +25,27 @@
     <dt></dt>
     <dd>
       <div data-ng-if="track.myVote" class="track-scores">
+        <span class="score-wrapper">
+          <h3>Hits</h3>
+          <span class="score score-hit" data-ng-bind="track.hits"></span>
+        </span>
 
-                  <span class="score-wrapper">
-                    <h3>Hits</h3>
-                    <span class="score score-hit"
-                          data-ng-bind="track.hits"></span>
-                  </span>
+        <span class="score-wrapper">
+          <h3>Misses</h3>
+          <span class="score score-miss" data-ng-bind="track.misses"></span>
+        </span>
 
-                  <span class="score-wrapper">
-                    <h3>Misses</h3>
-                    <span class="score score-miss"
-                          data-ng-bind="track.misses"></span>
-                  </span>
+        <span class="score-wrapper">
+          <h3>Maybes</h3>
+          <span class="score score-maybe" data-ng-bind="track.maybes"></span>
+          </span>
 
-                  <span class="score-wrapper">
-                    <h3>Maybes</h3>
-                    <span class="score score-maybe"
-                          data-ng-bind="track.maybes"></span>
-                    </span>
-
-                  <span class="score-wrapper">
-                    <h3>My vote</h3>
-                    <span class="score score-me" data-ng-class="track.myVote"
-                          data-ng-bind="track.myVote"></span>
-                  </span>
+        <span class="score-wrapper">
+          <h3>My vote</h3>
+          <span class="score score-me" data-ng-class="track.myVote"
+                data-ng-bind="track.myVote"></span>
+        </span>
       </div>
-
 
       <div data-ng-if="!track.myVote" class="score-buttons"
            data-ng-include="'score-buttons.html'"></div>
